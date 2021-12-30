@@ -20,10 +20,58 @@ func (ind *Index) NSFW(jpeg *MediaFile) bool {
 		return false
 	} else {
 		if nsfwLabels.NSFW(nsfw.ThresholdHigh) {
+
 			log.Warnf("index: %s might contain offensive content", sanitize.Log(jpeg.RelName(Config().OriginalsPath())))
 			return true
 		}
 	}
 
 	return false
+}
+
+func (ind *Index) NSFWLabels(jpeg *MediaFile) Labels {
+	filename, err := jpeg.Thumbnail(Config().ThumbPath(), thumb.Fit720)
+
+	if err != nil {
+		log.Error(err)
+		return Labels{}
+	}
+
+	if nsfwLabels, err := ind.nsfwDetector.File(filename); err != nil {
+		log.Error(err)
+		return Labels{}
+	} else {
+		if nsfwLabels.NSFW(nsfw.ThresholdHigh) {
+
+			return Labels{Label{
+				Name:        "sexy",
+				Source:      "nsfw",
+				Uncertainty: 0,
+				Priority:    int(nsfwLabels.Sexy),
+				Categories:  nil,
+			}, Label{
+				Name:        "porn",
+				Source:      "nsfw",
+				Uncertainty: 0,
+				Priority:    int(nsfwLabels.Porn),
+				Categories:  nil,
+			}, Label{
+				Name:        "hentai",
+				Source:      "nsfw",
+				Uncertainty: 0,
+				Priority:    int(nsfwLabels.Hentai),
+				Categories:  nil,
+			},
+				Label{
+					Name:        "drawing",
+					Source:      "nsfw",
+					Uncertainty: 0,
+					Priority:    int(nsfwLabels.Drawing),
+					Categories:  nil,
+				},
+			}
+		}
+	}
+
+	return Labels{}
 }

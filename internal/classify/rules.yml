@@ -216,9 +216,6 @@ hair slide:
 jean:
   see: fashion
 
-sock:
-  see: fashion
-
 sweatshirt:
   see: fashion
 
@@ -539,6 +536,10 @@ banded gecko:
   categories:
     - reptile
     - animal
+
+sock:
+  label: sock
+  threshold: 0.54
 
 frilled lizard:
   label: lizard
@@ -3276,7 +3277,7 @@ shoe:
   threshold: 0.3
 
 running shoe:
-  label: shoe
+  label: sneaker
   threshold: 0.54
 
 saltshaker:

@@ -47,6 +47,7 @@ func (ind *Index) MediaFile(m *MediaFile, o IndexOptions, originalName string) (
 	var locKeywords []string
 
 	file, primaryFile := entity.File{}, entity.File{}
+	nsfwLabels := classify.Labels{}
 
 	photo := entity.NewPhoto(o.Stack)
 	metaData := meta.NewData()
@@ -506,7 +507,10 @@ func (ind *Index) MediaFile(m *MediaFile, o IndexOptions, originalName string) (
 			}
 
 			if !photoExists && Config().Settings().Features.Private && Config().DetectNSFW() {
+
 				photo.PhotoPrivate = ind.NSFW(m)
+
+				labels = append(labels, nsfwLabels...)
 			}
 		}
 

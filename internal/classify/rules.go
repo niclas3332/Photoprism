@@ -5259,7 +5259,7 @@ var Rules = LabelRules{
 		Categories: []string{},
 	},
 	"sock": {
-		Label:      "portrait",
+		Label:      "sock",
 		Threshold:  0.500000,
 		Priority:   0,
 		Categories: []string{},
