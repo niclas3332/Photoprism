@@ -1,6 +1,7 @@
 package photoprism
 
 import (
+	"github.com/photoprism/photoprism/internal/classify"
 	"github.com/photoprism/photoprism/internal/nsfw"
 	"github.com/photoprism/photoprism/internal/thumb"
 	"github.com/photoprism/photoprism/pkg/sanitize"
@@ -29,40 +30,40 @@ func (ind *Index) NSFW(jpeg *MediaFile) bool {
 	return false
 }
 
-func (ind *Index) NSFWLabels(jpeg *MediaFile) Labels {
+func (ind *Index) NSFWLabels(jpeg *MediaFile) classify.Labels {
 	filename, err := jpeg.Thumbnail(Config().ThumbPath(), thumb.Fit720)
 
 	if err != nil {
 		log.Error(err)
-		return Labels{}
+		return classify.Labels{}
 	}
 
 	if nsfwLabels, err := ind.nsfwDetector.File(filename); err != nil {
 		log.Error(err)
-		return Labels{}
+		return classify.Labels{}
 	} else {
 		if nsfwLabels.NSFW(nsfw.ThresholdHigh) {
 
-			return Labels{Label{
+			return classify.Labels{classify.Label{
 				Name:        "sexy",
 				Source:      "nsfw",
 				Uncertainty: 0,
 				Priority:    int(nsfwLabels.Sexy),
 				Categories:  nil,
-			}, Label{
+			}, classify.Label{
 				Name:        "porn",
 				Source:      "nsfw",
 				Uncertainty: 0,
 				Priority:    int(nsfwLabels.Porn),
 				Categories:  nil,
-			}, Label{
+			}, classify.Label{
 				Name:        "hentai",
 				Source:      "nsfw",
 				Uncertainty: 0,
 				Priority:    int(nsfwLabels.Hentai),
 				Categories:  nil,
 			},
-				Label{
+				classify.Label{
 					Name:        "drawing",
 					Source:      "nsfw",
 					Uncertainty: 0,
@@ -73,5 +74,5 @@ func (ind *Index) NSFWLabels(jpeg *MediaFile) Labels {
 		}
 	}
 
-	return Labels{}
+	return classify.Labels{}
 }

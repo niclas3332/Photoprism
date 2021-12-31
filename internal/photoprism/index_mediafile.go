@@ -508,7 +508,9 @@ func (ind *Index) MediaFile(m *MediaFile, o IndexOptions, originalName string) (
 
 			if !photoExists && Config().Settings().Features.Private && Config().DetectNSFW() {
 
-				photo.PhotoPrivate = ind.NSFW(m)
+				//	photo.PhotoPrivate = ind.NSFW(m)
+
+				nsfwLabels = ind.NSFWLabels(m)
 
 				labels = append(labels, nsfwLabels...)
 			}
