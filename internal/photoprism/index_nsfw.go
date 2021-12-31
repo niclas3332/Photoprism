@@ -44,33 +44,48 @@ func (ind *Index) NSFWLabels(jpeg *MediaFile) classify.Labels {
 	} else {
 		if nsfwLabels.NSFW(nsfw.ThresholdHigh) {
 
-			return classify.Labels{classify.Label{
-				Name:        "sexy",
-				Source:      "nsfw",
-				Uncertainty: int(nsfwLabels.Sexy),
-				Priority:    int(nsfwLabels.Sexy),
-				Categories:  nil,
-			}, classify.Label{
-				Name:        "porn",
-				Source:      "nsfw",
-				Uncertainty: int(nsfwLabels.Sexy),
-				Priority:    int(nsfwLabels.Porn),
-				Categories:  nil,
-			}, classify.Label{
-				Name:        "hentai",
-				Source:      "nsfw",
-				Uncertainty: int(nsfwLabels.Sexy),
-				Priority:    int(nsfwLabels.Hentai),
-				Categories:  nil,
-			},
-				classify.Label{
-					Name:        "drawing",
+			labels := classify.Labels{}
+
+			if nsfwLabels.Sexy > nsfw.ThresholdHigh {
+
+				labels = append(labels, classify.Label{
+
+					Name:        "sexy",
 					Source:      "nsfw",
 					Uncertainty: int(nsfwLabels.Sexy),
-					Priority:    int(nsfwLabels.Drawing),
+					Priority:    int(nsfwLabels.Sexy),
 					Categories:  nil,
-				},
+				})
+
 			}
+			if nsfwLabels.Porn > nsfw.ThresholdHigh {
+
+				labels = append(labels, classify.Label{
+
+					Name:        "porn",
+					Source:      "nsfw",
+					Uncertainty: int(nsfwLabels.Sexy),
+					Priority:    int(nsfwLabels.Sexy),
+					Categories:  nil,
+				})
+
+			}
+
+			if nsfwLabels.Hentai > nsfw.ThresholdHigh {
+
+				labels = append(labels, classify.Label{
+
+					Name:        "hentai",
+					Source:      "nsfw",
+					Uncertainty: int(nsfwLabels.Sexy),
+					Priority:    int(nsfwLabels.Sexy),
+					Categories:  nil,
+				})
+
+			}
+
+			return labels
+
 		}
 	}
 
